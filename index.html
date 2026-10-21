@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6f8f72">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="健哥快乐空间">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>健哥快乐空间</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;background:#f5f7fb;color:#182230}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.start{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#eef6ff,#fbf4ff)}
+.start-card{width:min(520px,100%);background:#fff;border-radius:24px;padding:48px 30px;text-align:center;box-shadow:0 20px 60px rgba(30,50,80,.12)}
+.logo{font-size:56px}.start-card h1{margin:12px 0;font-size:32px}.muted{color:#718096;font-size:13px}
+.btn{border:1px solid #d9e2ee;background:#fff;color:#27364a;border-radius:9px;padding:8px 13px}
+.btn.primary{background:#2878f0;color:#fff;border-color:#2878f0}
+.btn.danger{color:#d84c4c}.btn.green{color:#15865b}
+.login-btn{border:0;border-radius:10px;padding:13px 72px;background:#2878f0;color:#fff;font-weight:700;margin:20px 0 10px}
+.top{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #dfe6ef;padding:12px 20px;display:flex;align-items:center}
+.brand{font-weight:800;font-size:18px}.brand small{display:block;color:#718096;font-weight:400;font-size:11px}
+.top-actions{margin-left:auto;display:flex;gap:8px}
+main{max-width:1180px;margin:22px auto;padding:0 16px}
+.home{text-align:center}.home h1{font-size:32px;margin:20px 0 8px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.feature{border:1px solid #dfe6ef;background:#fff;border-radius:16px;padding:25px;text-align:left;min-height:155px;box-shadow:0 5px 20px rgba(20,40,70,.04)}
+.feature:hover{transform:translateY(-2px)}.feature .icon{font-size:34px}.feature h3{margin:13px 0 5px}.feature p{margin:0;color:#718096;font-size:13px;line-height:1.6}
+.view-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}.view-head h2{margin:0}
+.panel{background:#fff;border:1px solid #dfe6ef;border-radius:14px;padding:18px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}.two{grid-template-columns:290px 1fr}
+.grid{display:grid;gap:16px}.form{display:grid;gap:11px}label{display:grid;gap:5px;color:#718096;font-size:13px}
+input,select,textarea{width:100%;border:1px solid #d6dfeb;border-radius:8px;padding:9px;background:#fff;color:#182230}
+textarea{resize:vertical;min-height:180px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.list{display:grid;gap:9px}.item{border:1px solid #dfe6ef;border-radius:9px;padding:11px}.item.active{border-color:#2878f0;background:#f8fbff}
+.empty{text-align:center;color:#718096;padding:30px}
+.progress{height:8px;background:#edf1f6;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:#2878f0}
+.summary{display:flex;gap:22px;flex-wrap:wrap;margin:15px 0}.money{font-size:17px;font-weight:800}.income{color:#15976a}.expense{color:#df5353}
+.modal{position:fixed;z-index:20;inset:0;background:rgba(10,20,35,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-card{width:min(420px,100%);background:#fff;border-radius:16px;padding:28px}.modal-card h2{text-align:center;margin-top:0}
+.toast{position:fixed;z-index:50;left:50%;bottom:22px;transform:translateX(-50%);background:#111827;color:#fff;padding:9px 16px;border-radius:8px;display:none}
+.chapter-images{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.chapter-images img{width:100px;height:100px;object-fit:cover;border-radius:8px;border:1px solid #dfe6ef}
+@media(max-width:800px){.features{grid-template-columns:1fr 1fr}.cards,.two{grid-template-columns:1fr}.top-actions{display:none}}
+@media(max-width:520px){main{padding:0 10px}.features{grid-template-columns:1fr}.home h1{font-size:27px}.start-card{padding:38px 22px}}
+
+/* 手机 App 化增强 */
+body{background:#f7f5ef;-webkit-tap-highlight-color:transparent}
+.top{padding:10px 14px;height:58px;box-shadow:0 1px 8px rgba(0,0,0,.04)}
+.top .brand{font-size:16px}
+main{max-width:760px;margin:0 auto;padding:14px 12px 92px}
+.home h1{font-size:27px;line-height:1.3;margin:18px 0 7px}
+.features{grid-template-columns:repeat(2,1fr);gap:11px;margin-top:20px}
+.feature{min-height:126px;padding:17px;border-radius:18px;box-shadow:0 3px 14px rgba(30,40,50,.05)}
+.feature .icon{font-size:29px}
+.feature h3{font-size:16px;margin:9px 0 4px}
+.feature p{font-size:12px;line-height:1.5}
+.view-head{position:sticky;top:58px;z-index:4;background:#f7f5ef;padding:8px 0 11px;margin:0 -2px 4px}
+.view-head .btn{min-height:42px}
+.view-head h2{font-size:20px}
+.panel,.item,.start-card,.modal-card{border-radius:18px}
+.panel{padding:15px}
+.cards,.two{grid-template-columns:1fr}
+input,select,textarea{font-size:16px;min-height:46px;border-radius:12px}
+textarea{min-height:150px}
+.btn{min-height:42px;border-radius:12px;padding:9px 13px}
+.row{flex-wrap:wrap}
+.row>.btn{flex:0 0 auto}
+.form{gap:12px}
+.item{padding:13px}
+.top-actions{gap:5px}
+.bottom-nav-app{display:grid!important}
+@media(min-width:521px) and (max-width:800px){main{max-width:700px}.features{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){
+  .top-actions{display:none}
+  .top{position:sticky;top:0}
+  .brand small{font-size:10px}
+  .start{padding:14px}
+  .start-card{padding:34px 20px;border-radius:24px}
+  .start-card h1{font-size:27px}
+  .login-btn{width:100%;padding:13px}
+  .feature{min-height:120px}
+  .feature:active{transform:scale(.98)}
+  .summary{gap:12px;font-size:13px}
+  .money{font-size:16px}
+  .chapter-images img{width:82px;height:82px}
+  .modal{padding:0;align-items:end}
+  .modal-card{width:100%;border-radius:24px 24px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom))}
+}
+@media(max-width:380px){
+  .features{gap:8px}.feature{padding:14px;min-height:112px}.feature .icon{font-size:25px}
+  main{padding-left:9px;padding-right:9px}
+}
+.app-shell{min-height:100vh;min-height:100dvh}
+body{overscroll-behavior-y:none}
+button,a{touch-action:manipulation}
+@media(max-width:700px){
+  .top{padding-top:calc(10px + env(safe-area-inset-top))}
+  .content{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+  .sheet{padding-bottom:calc(22px + env(safe-area-inset-bottom))}
+}
+@media(display-mode: standalone){
+  .top{padding-top:calc(10px + env(safe-area-inset-top))}
+}
+</style>
+</head>
+<body>
+
+<div id="startPage" class="start">
+  <div class="start-card">
+    <div class="logo">🌟</div>
+    <h1>健哥快乐空间</h1>
+    <p class="muted">你的私人本地记录空间</p>
+    <button id="loginBtn" class="login-btn">登录</button>
+    <p class="muted">数据仅保存在当前浏览器，不连接服务器</p>
+    <p class="muted" style="margin-top:16px">首次使用：先部署到 HTTPS 网站，再使用浏览器菜单“安装到主屏幕”。</p>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+<header class="top">
+  <div class="brand">🌟 健哥快乐空间<small>本地存储 · 不连接服务器</small></div>
+  <div class="top-actions">
+    <button class="btn" id="exportBtn">导出全部数据</button>
+    <button class="btn green" id="importBtn">导入 JSON</button>
+    <button class="btn green" id="installBtn" style="display:none">安装到手机</button>
+    <button class="btn" id="logoutBtn">退出登录</button>
+    <input id="importFile" type="file" accept=".json,application/json" class="hidden">
+  </div>
+</header>
+
+<main>
+<section id="home" class="view">
+  <div class="home">
+    <h1>欢迎来到健哥快乐空间</h1>
+    <p class="muted">选择一个功能，开始记录属于你的生活。</p>
+  </div>
+  <div class="features">
+    <button class="feature" data-view="diary"><div class="icon">✍️</div><h3>日记</h3><p>按日期记录生活、心情和想法。</p></button>
+    <button class="feature" data-view="tree"><div class="icon">🌳</div><h3>树洞</h3><p>用独立密码保护你的私密心事，并保存历史记录。</p></button>
+    <button class="feature" data-view="money"><div class="icon">💰</div><h3>账本</h3><p>记录收支、筛选账目并按月份整理。</p></button>
+    <button class="feature" data-view="books"><div class="icon">📚</div><h3>读书</h3><p>管理书目、阅读状态、章节笔记和图片。</p></button>
+    <button class="feature" data-view="todo"><div class="icon">✅</div><h3>待办</h3><p>记录事项、优先级、截止日期和完成状态。</p></button>
+  </div>
+</section>
+
+<section id="diary" class="view hidden">
+  <div class="view-head"><button class="btn" data-home>← 首页</button><h2>✍️ 日记</h2></div>
+  <div class="grid two">
+    <div class="panel">
+      <div class="row"><b>日记列表</b><button class="btn primary" id="newDiary">＋ 新日记</button></div>
+      <div id="diaryList" class="list" style="margin-top:12px"></div>
+    </div>
+    <div class="panel">
+      <div class="row"><b id="diaryTitle">新日记</b><button class="btn primary" id="saveDiary">保存</button></div>
+      <div class="form" style="margin-top:12px">
+        <label>日期<input id="diaryDate" type="date"></label>
+        <label>内容<textarea id="diaryText" placeholder="写下今天的故事……"></textarea></label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tree" class="view hidden">
+  <div class="view-head"><button class="btn" data-home>← 首页</button><h2>🌳 树洞</h2></div>
+  <div class="panel">
+    <div class="row"><div><b>我的树洞</b><div class="muted">进入树洞需要单独的树洞密码</div></div><button class="btn primary" id="newTree">＋ 新建</button></div>
+    <div id="treeList" class="list" style="margin-top:14px"></div>
+    <div id="treeEditor" class="hidden" style="border-top:1px solid #dfe6ef;margin-top:16px;padding-top:16px">
+      <div class="form">
+        <label>标题<input id="treeTitle"></label>
+        <label>日期<input id="treeDate" type="date"></label>
+        <label>内容<textarea id="treeText" style="min-height:300px" placeholder="把心里话写下来……"></textarea></label>
+        <div class="row"><button class="btn" id="cancelTree">取消</button><button class="btn primary" id="saveTree">保存</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="money" class="view hidden">
+  <div class="view-head"><button class="btn" data-home>← 首页</button><h2>💰 账本</h2></div>
+  <div class="cards">
+    <div class="panel">
+      <b>添加账目</b>
+      <div class="form" style="margin-top:12px">
+        <label>金额<input id="moneyAmount" type="number" step="0.01"></label>
+        <label>类型<select id="moneyType"><option value="expense">支出</option><option value="income">收入</option></select></label>
+        <label>分类<input id="moneyCat" placeholder="餐饮 / 交通 / 工资"></label>
+        <label>日期<input id="moneyDate" type="date"></label>
+        <label>备注<input id="moneyNote"></label>
+        <button class="btn primary" id="saveMoney">保存</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="row"><b>账本目录</b><button class="btn" id="clearMoneyFilter">清除筛选</button></div>
+      <div class="form" style="margin-top:12px">
+        <label>月份<input id="moneyMonth" type="month"></label>
+        <label>开始日期<input id="moneyFrom" type="date"></label>
+        <label>结束日期<input id="moneyTo" type="date"></label>
+        <label>收支类型<select id="moneyFilterType"><option value="all">全部</option><option value="expense">支出</option><option value="income">收入</option></select></label>
+      </div>
+      <div id="moneySummary" class="summary"></div>
+      <div id="moneyMonths"></div>
+    </div>
+  </div>
+</section>
+
+<section id="books" class="view hidden">
+  <div class="view-head"><button class="btn" data-home>← 首页</button><h2>📚 读书</h2></div>
+  <div class="grid two">
+    <div class="panel">
+      <div class="row"><b>我的书架</b><button class="btn primary" id="newBook">＋ 新建书目</button></div>
+      <label style="margin-top:12px">筛选
+        <select id="bookFilter"><option value="all">全部</option><option value="unread">未读</option><option value="reading">在读</option><option value="read">已读</option></select>
+      </label>
+      <div id="bookList" class="list" style="margin-top:12px"></div>
+    </div>
+
+    <div class="panel">
+      <div class="row"><div><b id="bookDetailTitle">新建书目</b><div id="bookDetailMeta" class="muted"></div></div><button class="btn primary" id="saveBook">保存书目</button></div>
+      <div class="form" style="margin-top:12px">
+        <label>书名<input id="bookTitle"></label>
+        <label>作者<input id="bookAuthor"></label>
+        <label>阅读状态<select id="bookStatus"><option value="unread">未读</option><option value="reading">在读</option><option value="read">已读</option></select></label>
+        <label>阅读进度（%）<input id="bookProgress" type="number" min="0" max="100" value="0"></label>
+        <label>读书感悟 / 总结<textarea id="bookNote" placeholder="记录整本书的感悟、评价、书摘或总结……"></textarea></label>
+      </div>
+
+      <div style="border-top:1px solid #dfe6ef;margin-top:20px;padding-top:18px">
+        <div class="row"><div><b>章节记录</b><div class="muted">可以逐章记录，也可以单独写一篇读书笔记。</div></div><button class="btn" id="newChapter">＋ 新建记录</button></div>
+        <div id="chapterList" class="list" style="margin-top:12px"></div>
+      </div>
+
+      <div id="chapterEditor" class="hidden" style="border-top:1px solid #dfe6ef;margin-top:18px;padding-top:18px">
+        <div class="row"><b id="chapterEditorTitle">新建章节记录</b><button class="btn primary" id="saveChapter">保存记录</button></div>
+        <div class="form" style="margin-top:12px">
+          <label>章节 / 标题<input id="chapterName" placeholder="例如：第 3 章 / 我的读书感悟"></label>
+          <label>日期<input id="chapterDate" type="date"></label>
+          <label>笔记 / 感悟<textarea id="chapterText" style="min-height:220px"></textarea></label>
+          <label>插入图片<input id="chapterImages" type="file" accept="image/*" multiple></label>
+          <div id="imagePreview" class="chapter-images"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="todo" class="view hidden">
+  <div class="view-head"><button class="btn" data-home>← 首页</button><h2>✅ 待办</h2></div>
+  <div class="cards">
+    <div class="panel"><b>添加待办</b>
+      <div class="form" style="margin-top:12px">
+        <label>事项<input id="todoTitle" placeholder="例如：完成课程作业"></label>
+        <label>截止日期<input id="todoDate" type="date"></label>
+        <label>分类<input id="todoTag" placeholder="学习 / 工作 / 生活"></label>
+        <label>优先级<select id="todoPriority"><option>普通</option><option>重要</option><option>紧急</option></select></label>
+        <label>备注<textarea id="todoNote" style="min-height:110px"></textarea></label>
+        <button class="btn primary" id="saveTodo">添加待办</button>
+      </div>
+    </div>
+    <div class="panel"><div class="row"><b>我的待办</b><span id="todoCount" class="muted"></span></div><div id="todoList" class="list" style="margin-top:12px"></div></div>
+  </div>
+</section>
+</main>
+<nav class="bottom-nav-app" aria-label="底部导航" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:15;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-top:1px solid #dfe6ef;padding:6px 8px calc(6px + env(safe-area-inset-bottom));grid-template-columns:repeat(6,1fr);gap:2px">
+  <button class="btn" data-nav="home" style="border:0;background:transparent;padding:5px 2px;font-size:11px">⌂<br>首页</button>
+  <button class="btn" data-nav="diary" style="border:0;background:transparent;padding:5px 2px;font-size:11px">✍️<br>日记</button>
+  <button class="btn" data-nav="tree" style="border:0;background:transparent;padding:5px 2px;font-size:11px">🌳<br>树洞</button>
+  <button class="btn" data-nav="money" style="border:0;background:transparent;padding:5px 2px;font-size:11px">💰<br>账本</button>
+  <button class="btn" data-nav="books" style="border:0;background:transparent;padding:5px 2px;font-size:11px">📚<br>读书</button>
+  <button class="btn" data-nav="todo" style="border:0;background:transparent;padding:5px 2px;font-size:11px">✅<br>待办</button>
+</nav>
+</div>
+
+<div id="loginModal" class="modal hidden">
+  <div class="modal-card">
+    <h2>🔐 登录</h2>
+    <p class="muted" id="loginHint">首次使用请输入密码，之后用该密码登录。</p>
+    <input id="loginPassword" type="password" placeholder="请输入本地密码">
+    <button class="btn primary" style="width:100%;margin-top:10px" id="unlockBtn">登录</button>
+    <p class="muted" id="loginError" style="text-align:center"></p>
+  </div>
+</div>
+
+<div id="treeModal" class="modal hidden">
+  <div class="modal-card">
+    <h2>🌳 树洞密码</h2>
+    <p class="muted">首次使用会设置树洞密码，以后进入树洞都需要验证。</p>
+    <input id="treePassword" type="password" placeholder="请输入树洞密码">
+    <button class="btn primary" style="width:100%;margin-top:10px" id="unlockTreeBtn">进入树洞</button>
+    <p class="muted" id="treeError" style="text-align:center"></p>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let state={diaries:{},treeEntries:[],money:[],books:[],todos:[]};
+let db=null,treeUnlocked=false,currentBookId=null,currentChapterId=null,currentImages=[];
+
+function toast(text){$("toast").textContent=text;$("toast").style.display="block";setTimeout(()=>$("toast").style.display="none",1500)}
+async function sha256(text){
+  const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(x=>x.toString(16).padStart(2,"0")).join("");
+}
+function openDB(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open("jian_ge_happy_space",1);
+    req.onupgradeneeded=()=>req.result.createObjectStore("main");
+    req.onsuccess=()=>{db=req.result;resolve()};
+    req.onerror=()=>reject(req.error);
+  });
+}
+function loadState(){
+  return new Promise(resolve=>{
+    const req=db.transaction("main").objectStore("main").get("state");
+    req.onsuccess=()=>resolve(req.result||null);
+    req.onerror=()=>resolve(null);
+  });
+}
+function saveState(){
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction("main","readwrite");
+    tx.objectStore("main").put(state,"state");
+    tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);
+  });
+}
+
+function showView(id){
+  document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden"));
+  if(id==="tree"&&!treeUnlocked){$("treeModal").classList.remove("hidden");$("treePassword").focus();return}
+  $(id).classList.remove("hidden");
+  if(id==="diary")renderDiaries();
+  if(id==="tree")renderTrees();
+  if(id==="money")renderMoney();
+  if(id==="books"){renderBooks();if(!currentBookId)resetBookEditor()}
+  if(id==="todo")renderTodos();
+  updateMobileNav(id);
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>showView(b.dataset.view));document.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>showView(b.dataset.nav));
+function updateMobileNav(id){
+  document.querySelectorAll("[data-nav]").forEach(b=>b.style.color=b.dataset.nav===id?"#2878f0":"#718096");
+}
+
+document.querySelectorAll("[data-home]").forEach(b=>b.onclick=()=>showView("home"));
+
+function renderDiaries(){
+  const arr=Object.entries(state.diaries).sort((a,b)=>b[0].localeCompare(a[0]));
+  $("diaryList").innerHTML=arr.length?arr.map(([d,t])=>`<div class="item"><b>${d}</b><div class="muted">${esc(t.slice(0,80))}</div><button class="btn" data-diary="${d}" style="margin-top:7px">查看</button></div>`).join(""):'<div class="empty">还没有日记</div>';
+  document.querySelectorAll("[data-diary]").forEach(b=>b.onclick=()=>{$("diaryDate").value=b.dataset.diary;$("diaryText").value=state.diaries[b.dataset.diary]||"";$("diaryTitle").textContent="编辑日记"});
+}
+$("newDiary").onclick=()=>{$("diaryDate").value=today();$("diaryText").value="";$("diaryTitle").textContent="新日记"};
+$("saveDiary").onclick=async()=>{const d=$("diaryDate").value;if(!d)return toast("请选择日期");state.diaries[d]=$("diaryText").value;await saveState();renderDiaries();toast("日记已保存")};
+
+function renderTrees(){
+  const arr=[...(state.treeEntries||[])].sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  $("treeList").innerHTML=arr.length?arr.map(x=>`<div class="item">
+    <div class="row"><div><b>${esc(x.title||"无题")}</b><div class="muted">${x.date||""}</div></div><button class="btn danger" data-treedel="${x.id}">删除</button></div>
+    <div style="white-space:pre-wrap;margin-top:8px">${esc(x.text||"")}</div>
+    <button class="btn" data-treeview="${x.id}" style="margin-top:8px">查看 / 编辑</button>
+  </div>`).join(""):'<div class="empty">还没有树洞记录</div>';
+  document.querySelectorAll("[data-treeview]").forEach(b=>b.onclick=()=>editTree(b.dataset.treeview));
+  document.querySelectorAll("[data-treedel]").forEach(b=>b.onclick=async()=>{state.treeEntries=state.treeEntries.filter(x=>x.id!==b.dataset.treedel);await saveState();renderTrees()});
+}
+function editTree(id){
+  const x=state.treeEntries.find(x=>x.id===id);if(!x)return;
+  $("treeTitle").value=x.title||"";$("treeDate").value=x.date||today();$("treeText").value=x.text||"";$("treeEditor").classList.remove("hidden");$("treeEditor").dataset.id=id;
+}
+$("newTree").onclick=()=>{$("treeTitle").value="";$("treeDate").value=today();$("treeText").value="";$("treeEditor").dataset.id="";$("treeEditor").classList.remove("hidden")};
+$("cancelTree").onclick=()=>$("treeEditor").classList.add("hidden");
+$("saveTree").onclick=async()=>{
+  const text=$("treeText").value.trim();if(!text)return toast("请输入内容");
+  const id=$("treeEditor").dataset.id;
+  if(id){const x=state.treeEntries.find(x=>x.id===id);x.title=$("treeTitle").value.trim()||"无题";x.date=$("treeDate").value||today();x.text=text}
+  else state.treeEntries.push({id:crypto.randomUUID(),title:$("treeTitle").value.trim()||"无题",date:$("treeDate").value||today(),text});
+  await saveState();$("treeEditor").classList.add("hidden");renderTrees();toast("树洞已保存");
+};
+
+$("unlockTreeBtn").onclick=async()=>{
+  const p=$("treePassword").value;if(!p)return;
+  const h=await sha256(p),old=localStorage.getItem("jian_ge_tree_password_hash");
+  if(!old)localStorage.setItem("jian_ge_tree_password_hash",h);
+  else if(h!==old){$("treeError").textContent="树洞密码错误";return}
+  treeUnlocked=true;$("treeModal").classList.add("hidden");$("treePassword").value="";$("treeError").textContent="";showView("tree");
+};
+
+function renderMoney(){
+  let arr=[...state.money];
+  const month=$("moneyMonth").value,from=$("moneyFrom").value,to=$("moneyTo").value,type=$("moneyFilterType").value;
+  arr=arr.filter(x=>(!month||x.date.startsWith(month))&&(!from||x.date>=from)&&(!to||x.date<=to)&&(type==="all"||x.type===type));
+  const income=arr.filter(x=>x.type==="income").reduce((s,x)=>s+x.amount,0);
+  const expense=arr.filter(x=>x.type==="expense").reduce((s,x)=>s+x.amount,0);
+  $("moneySummary").innerHTML=`<span>收入 <b class="money income">+${income.toFixed(2)}</b></span><span>支出 <b class="money expense">-${expense.toFixed(2)}</b></span><span>结余 <b class="money">${(income-expense).toFixed(2)}</b></span>`;
+  const groups={};arr.sort((a,b)=>b.date.localeCompare(a.date)).forEach(x=>{const m=x.date.slice(0,7);(groups[m]??=[]).push(x)});
+  const months=Object.keys(groups).sort().reverse();
+  $("moneyMonths").innerHTML=months.length?months.map(m=>`<div class="item" style="margin-top:12px"><div class="row"><b>📁 ${m}</b><span class="muted">${groups[m].length} 笔</span></div>
+  <div class="list" style="margin-top:9px">${groups[m].map(x=>`<div class="row"><div><b>${x.date}</b>　${esc(x.category)}　<span class="muted">${esc(x.note||"")}</span></div><div><span class="${x.type} money">${x.type==="income"?"+":"-"}${x.amount.toFixed(2)}</span> <button class="btn danger" data-money="${x.id}" style="padding:3px 7px">删除</button></div></div>`).join("")}</div></div>`).join(""):'<div class="empty">没有符合条件的账目</div>';
+  document.querySelectorAll("[data-money]").forEach(b=>b.onclick=async()=>{state.money=state.money.filter(x=>x.id!==b.dataset.money);await saveState();renderMoney()});
+}
+$("saveMoney").onclick=async()=>{
+  const amount=Number($("moneyAmount").value);if(!amount)return toast("请输入金额");
+  state.money.push({id:crypto.randomUUID(),amount,date:$("moneyDate").value||today(),type:$("moneyType").value,category:$("moneyCat").value||"未分类",note:$("moneyNote").value});
+  ["moneyAmount","moneyCat","moneyNote"].forEach(id=>$(id).value="");await saveState();renderMoney();toast("账目已保存");
+};
+["moneyMonth","moneyFrom","moneyTo","moneyFilterType"].forEach(id=>$(id).onchange=renderMoney);
+$("clearMoneyFilter").onclick=()=>{["moneyMonth","moneyFrom","moneyTo"].forEach(id=>$(id).value="");$("moneyFilterType").value="all";renderMoney()};
+
+const statusText={unread:"未读",reading:"在读",read:"已读"};
+function resetBookEditor(){
+  currentBookId=null;currentChapterId=null;currentImages=[];
+  $("bookTitle").value="";$("bookAuthor").value="";$("bookStatus").value="unread";$("bookProgress").value=0;$("bookNote").value="";
+  $("bookDetailTitle").textContent="新建书目";$("bookDetailMeta").textContent="";$("chapterEditor").classList.add("hidden");renderChapters();
+}
+function renderBooks(){
+  const filter=$("bookFilter").value;
+  const arr=state.books.filter(x=>filter==="all"||x.status===filter);
+  $("bookList").innerHTML=arr.length?arr.map(x=>`<div class="item ${x.id===currentBookId?"active":""}" data-book="${x.id}">
+    <div class="row"><div><b>${esc(x.title)}</b><div class="muted">${esc(x.author||"未知作者")} · ${statusText[x.status]}</div></div><span>${x.progress}%</span></div>
+    <div class="progress" style="margin:9px 0"><i style="width:${x.progress}%"></i></div>
+    <div class="muted">${esc((x.note||"").slice(0,90))}</div>
+    <div class="muted" style="margin-top:5px">📖 ${(x.chapters||[]).length} 条章节/读书记录</div>
+  </div>`).join(""):'<div class="empty">暂无书目</div>';
+  document.querySelectorAll("[data-book]").forEach(b=>b.onclick=()=>loadBook(b.dataset.book));
+}
+function loadBook(id){
+  const x=state.books.find(x=>x.id===id);if(!x)return;
+  currentBookId=id;currentChapterId=null;currentImages=[];
+  $("bookTitle").value=x.title;$("bookAuthor").value=x.author||"";$("bookStatus").value=x.status;$("bookProgress").value=x.progress;$("bookNote").value=x.note||"";
+  $("bookDetailTitle").textContent=x.title;$("bookDetailMeta").textContent=`${statusText[x.status]} · ${x.progress}%`;
+  $("chapterEditor").classList.add("hidden");renderBooks();renderChapters();
+}
+$("newBook").onclick=resetBookEditor;
+$("bookFilter").onchange=renderBooks;
+$("saveBook").onclick=async()=>{
+  const title=$("bookTitle").value.trim();if(!title)return toast("请填写书名");
+  let x=currentBookId?state.books.find(x=>x.id===currentBookId):null;
+  if(!x){x={id:crypto.randomUUID(),title:"",author:"",status:"unread",progress:0,note:"",chapters:[]};state.books.push(x);currentBookId=x.id}
+  x.title=title;x.author=$("bookAuthor").value;x.status=$("bookStatus").value;x.progress=Math.max(0,Math.min(100,Number($("bookProgress").value)||0));x.note=$("bookNote").value;x.chapters=x.chapters||[];
+  await saveState();renderBooks();renderChapters();$("bookDetailTitle").textContent=x.title;$("bookDetailMeta").textContent=`${statusText[x.status]} · ${x.progress}%`;toast("书目已保存");
+};
+function renderChapters(){
+  const book=state.books.find(x=>x.id===currentBookId),arr=book?.chapters||[];
+  $("chapterList").innerHTML=arr.length?arr.map(c=>`<div class="item">
+    <div class="row"><b>${esc(c.title||"无标题")}</b><span class="muted">${c.date||""}</span></div>
+    <div style="white-space:pre-wrap;margin-top:7px">${esc((c.text||"").slice(0,240))}</div>
+    ${c.images?.length?`<div class="muted" style="margin-top:6px">🖼️ ${c.images.length} 张图片</div>`:""}
+    <button class="btn" data-chview="${c.id}" style="margin-top:8px">查看 / 编辑</button>
+    <button class="btn danger" data-chdel="${c.id}" style="margin-top:8px">删除</button>
+  </div>`).join(""):'<div class="empty">还没有章节记录或独立读书笔记。</div>';
+  document.querySelectorAll("[data-chview]").forEach(b=>b.onclick=()=>editChapter(b.dataset.chview));
+  document.querySelectorAll("[data-chdel]").forEach(b=>b.onclick=async()=>{const book=state.books.find(x=>x.id===currentBookId);book.chapters=book.chapters.filter(c=>c.id!==b.dataset.chdel);await saveState();renderChapters()});
+}
+function editChapter(id){
+  const book=state.books.find(x=>x.id===currentBookId),c=book?.chapters.find(x=>x.id===id);if(!c)return;
+  currentChapterId=id;currentImages=[...(c.images||[])];$("chapterEditorTitle").textContent="查看 / 编辑记录";$("chapterName").value=c.title||"";$("chapterDate").value=c.date||today();$("chapterText").value=c.text||"";$("chapterEditor").classList.remove("hidden");renderImagePreview();
+}
+$("newChapter").onclick=()=>{
+  if(!currentBookId)return toast("请先保存一本书");
+  currentChapterId=null;currentImages=[];$("chapterEditorTitle").textContent="新建章节 / 读书笔记";$("chapterName").value="";$("chapterDate").value=today();$("chapterText").value="";$("chapterImages").value="";$("chapterEditor").classList.remove("hidden");renderImagePreview();
+};
+function renderImagePreview(){
+  $("imagePreview").innerHTML=currentImages.map((src,i)=>`<div><img src="${src}"><button class="btn danger" data-img="${i}" style="display:block;margin-top:3px;padding:3px 7px">删除图片</button></div>`).join("");
+  document.querySelectorAll("[data-img]").forEach(b=>b.onclick=()=>{currentImages.splice(Number(b.dataset.img),1);renderImagePreview()});
+}
+$("chapterImages").onchange=async e=>{
+  for(const file of [...e.target.files]){
+    if(!file.type.startsWith("image/"))continue;
+    const src=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)});
+    currentImages.push(src);
+  }
+  e.target.value="";renderImagePreview();
+};
+$("saveChapter").onclick=async()=>{
+  const book=state.books.find(x=>x.id===currentBookId);if(!book)return toast("请先保存书目");
+  book.chapters=book.chapters||[];
+  let c=currentChapterId?book.chapters.find(x=>x.id===currentChapterId):null;
+  if(!c){c={id:crypto.randomUUID(),title:"",date:"",text:"",images:[]};book.chapters.push(c)}
+  c.title=$("chapterName").value.trim()||"读书笔记";c.date=$("chapterDate").value||today();c.text=$("chapterText").value;c.images=[...currentImages];
+  await saveState();renderChapters();$("chapterEditor").classList.add("hidden");toast("读书记录已保存");
+};
+
+function renderTodos(){
+  const arr=[...state.todos].sort((a,b)=>(Number(a.done)-Number(b.done))||(a.date||"").localeCompare(b.date||""));
+  $("todoCount").textContent=`${arr.filter(x=>!x.done).length} 项未完成`;
+  $("todoList").innerHTML=arr.length?arr.map(x=>`<div class="item">
+    <div class="row"><label style="display:flex;align-items:center;gap:8px;color:inherit"><input type="checkbox" data-check="${x.id}" ${x.done?"checked":""}><b style="${x.done?"text-decoration:line-through;color:#9aa5b1":""}">${esc(x.title)}</b></label><button class="btn danger" data-todel="${x.id}">删除</button></div>
+    <div class="muted" style="margin-top:7px">${x.date||"无截止日期"} · ${esc(x.tag||"未分类")} · ${esc(x.priority||"普通")}</div>
+    ${x.note?`<div class="muted" style="margin-top:5px">${esc(x.note)}</div>`:""}
+  </div>`).join(""):'<div class="empty">暂无待办事项</div>';
+  document.querySelectorAll("[data-check]").forEach(b=>b.onchange=async()=>{const x=state.todos.find(x=>x.id===b.dataset.check);x.done=b.checked;await saveState();renderTodos()});
+  document.querySelectorAll("[data-todel]").forEach(b=>b.onclick=async()=>{state.todos=state.todos.filter(x=>x.id!==b.dataset.todel);await saveState();renderTodos()});
+}
+$("saveTodo").onclick=async()=>{
+  const title=$("todoTitle").value.trim();if(!title)return toast("请填写待办事项");
+  state.todos.push({id:crypto.randomUUID(),title,date:$("todoDate").value,tag:$("todoTag").value,priority:$("todoPriority").value,note:$("todoNote").value,done:false});
+  ["todoTitle","todoTag","todoNote"].forEach(id=>$(id).value="");await saveState();renderTodos();toast("待办已添加");
+};
+
+$("loginBtn").onclick=()=>{$("loginModal").classList.remove("hidden");$("loginPassword").focus()};
+$("unlockBtn").onclick=async()=>{
+  const p=$("loginPassword").value;if(!p)return;
+  const h=await sha256(p),old=localStorage.getItem("jian_ge_login_password_hash");
+  if(!old)localStorage.setItem("jian_ge_login_password_hash",h);
+  else if(h!==old){$("loginError").textContent="密码错误";return}
+  $("loginModal").classList.add("hidden");$("startPage").classList.add("hidden");$("app").classList.remove("hidden");showView("home");$("loginPassword").value="";$("loginError").textContent="";
+};
+$("loginPassword").onkeydown=e=>{if(e.key==="Enter")$("unlockBtn").click()};
+$("logoutBtn").onclick=()=>{$("app").classList.add("hidden");$("startPage").classList.remove("hidden");treeUnlocked=false};
+
+$("exportBtn").onclick=()=>{
+  const data={version:3,exportedAt:new Date().toISOString(),state};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="健哥快乐空间-全部数据.json";a.click();URL.revokeObjectURL(a.href);
+};
+$("importBtn").onclick=()=>$("importFile").click();
+$("importFile").onchange=async e=>{
+  const file=e.target.files[0];if(!file)return;
+  try{
+    const obj=JSON.parse(await file.text());
+    if(!obj.state)throw new Error();
+    state=obj.state;
+    state.diaries=state.diaries||{};
+    state.treeEntries=state.treeEntries||[];
+    state.money=state.money||[];
+    state.books=(state.books||[]).map(x=>({...x,chapters:x.chapters||[],status:x.status||"unread",progress:Number(x.progress)||0}));
+    state.todos=state.todos||[];
+    await saveState();toast("导入成功");
+  }catch(err){toast("JSON 文件格式无效")}
+  e.target.value="";
+};
+
+(async()=>{
+  try{
+    await openDB();
+    const old=await loadState();
+    if(old){
+      state={...state,...old};
+      state.diaries=state.diaries||old.diary||{};
+      state.treeEntries=state.treeEntries||[];
+      if(old.tree&&!state.treeEntries.length)state.treeEntries=[{id:crypto.randomUUID(),title:"旧树洞记录",date:today(),text:old.tree}];
+      state.money=state.money||[];
+      state.books=(state.books||[]).map(x=>({
+        id:x.id||crypto.randomUUID(),title:x.title||x.t||"",author:x.author||x.a||"",
+        status:x.status||x.s||"unread",progress:Number(x.progress??x.p??0),note:x.note??x.n??"",
+        chapters:x.chapters||[]
+      }));
+      state.todos=state.todos||[];
+    }
+    const d=today();
+    $("diaryDate").value=d;$("treeDate").value=d;$("moneyDate").value=d;$("todoDate").value=d;$("chapterDate").value=d;
+  }catch(e){
+    alert("本地数据库初始化失败，请使用较新的 Chrome / Edge / Safari 打开此文件。");
+  }
+})();
+
+/* PWA：安装提示、离线缓存与 App 模式 */
+(function(){
+  let deferredPrompt = null;
+  const installBtn = document.getElementById("installBtn");
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtn) installBtn.style.display = "inline-block";
+  });
+
+  installBtn?.addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    installBtn.style.display = "none";
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredPrompt = null;
+    if (installBtn) installBtn.style.display = "none";
+    if (typeof toast === "function") toast("已安装到手机");
+  });
+
+  // 注册 Service Worker：只有 HTTPS/localhost 环境可用。
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  }
+})();
+</script>
+</body>
+</html>
